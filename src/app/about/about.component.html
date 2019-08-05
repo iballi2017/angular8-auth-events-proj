@@ -271,48 +271,392 @@
                 Instead of depending on MongoDB, we'll be creating api method with hard-coded events.
                 Because we are only focusing on login authentication in this project.
             </p>
-            <p>
-                
-   router.get('/events', (req, res) =>{{'{'}}
-    let events = [
-         {{'{'}}
-            "id": "1",
-            "name": "Auto Expo",
-            "description": "Lorem Ipsum",
-            "date": "2012-04-20T27:25:43:511Z"
-        },
-         {{'{'}}
-            "id": "2",
-            "name": "Ent Lotus",
-            "description": "Ipsum Lorem",
-            "date": "2012-04-23T18:45:43:511Z"
-        },
-         {{'{'}}
-            "id": "3",
-            "name": "Chemical Digress",
-            "description": "Dpff Fyus",
-            "date": "2012-04-13T05:05:43:511Z"
-        },
-         {{'{'}}
-            "id": "4",
-            "name": "Science Display",
-            "description": "Jukry Latex",
-            "date": "2012-04-10T16:00:43:511Z"
-        }
-    ]
-    res.json(events)
-})
+
+
+            <p>                                    
+                    router.get('/events', (req, res) =>{{'{'}}<br />
+                        let events = [<br />
+                            {{'{'}}<br />
+                                "id": "1",<br />
+                                "name": "Auto Expo",<br />
+                                "description": "Lorem Ipsum",<br />
+                                "date": "2012-04-20T27:25:43:511Z"<br />
+                            },<br />
+                            {{'{'}}<br />
+                                "id": "2",<br />
+                                "name": "Ent Lotus",<br />
+                                "description": "Ipsum Lorem",<br />
+                                "date": "2012-04-23T18:45:43:511Z"<br />
+                            },<br />
+                            {{'{'}}<br />
+                                "id": "3",<br />
+                                "name": "Chemical Digress",<br />
+                                "description": "Dpff Fyus",<br />
+                                "date": "2012-04-13T05:05:43:511Z"<br />
+                            },<br />
+                            {{'{'}}<br />
+                                "id": "4",<br />
+                                "name": "Science Display",<br />
+                                "description": "Jukry Latex",<br />
+                                "date": "2012-04-10T16:00:43:511Z"<br />
+                            }<br />
+                        ]<br />
+                        res.json(events)<br />
+                    })<br />
 
             </p>
+            <p>                
+                note: The route block above contains an array of events with properties "id", "name", "description" and "date"
+                , and the event is returned as the response
+            </p>
             <p>
-                
-   note: The route block above contains an array of events with properties "id", "name", "description" and "date"
-   , and the event is returned as the response
+                Similarly, we create a "specialevents" api like below. We'll copy and paste events and rername "events" to "special"
             </p>
 
 
+            <p>                                    
+                router.get('/special', (req, res) =>{{'{'}}<br />
+                    let events = [<br />
+                        {{'{'}}<br />
+                            "id": "1",<br />
+                            "name": "Auto Expo",<br />
+                            "description": "Lorem Ipsum",<br />
+                            "date": "2012-04-20T27:25:43:511Z"<br />
+                        },<br />
+                        {{'{'}}<br />
+                            "id": "2",<br />
+                            "name": "Ent Lotus",<br />
+                            "description": "Ipsum Lorem",<br />
+                            "date": "2012-04-23T18:45:43:511Z"<br />
+                        },<br />
+                        {{'{'}}<br />
+                            "id": "3",<br />
+                            "name": "Chemical Digress",<br />
+                            "description": "Dpff Fyus",<br />
+                            "date": "2012-04-13T05:05:43:511Z"<br />
+                        },<br />
+                        {{'{'}}<br />
+                            "id": "4",<br />
+                            "name": "Science Display",<br />
+                            "description": "Jukry Latex",<br />
+                            "date": "2012-04-10T16:00:43:511Z"<br />
+                        }<br />
+                    ]<br />
+                    res.json(events)<br />
+                })<br />
 
+        </p>
+
+
+
+
+            <figure class="image is-1027x576">
+                <img src="../../assets/server-image7b.png">
+            </figure>
+
+
+            <h4>SECTION 8: Handling CORS Errors</h4>
+            <figure class="image is-1027x576">
+                <img src="../../assets/server-image8.png">
+            </figure>
+
+            <p>
+                This api backend server works nicely. But it cannot connect with our Angular frontend framework because of difference in port number.
+                To correct that;
+            </p>
+            <ul>
+                <li>1. Install cors
+                    <p>npm install cors --save</p>
+                </li>
+                <li>2. After installation, open server.js file, and require "cors" like below
+                    <p>const cors = require('cors')</p>
+                </li>
+                <li>3. Just below the instance of express() before the use of body-parser, "use" cors() method
+                    <p>const app = express()<br />
+                    ****        app.use(cors())<br />
+                    app.use(bodyParser.json())</p>
+                </li>
+            </ul>
 
         </div>
     </div>
+</div>
+
+<div class="container content">
+    <div class="columns">
+        <div class="column is-8-desktop is-offset-2-desktop">
+            <h2>Part Three</h2>
+            <h3>Back-end Server AUthentication</h3>
+            <figure class="image is-1027x576">
+                <img src="../../assets/server-image9.png">
+            </figure>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column is-8-desktop is-offset-2-desktop">
+            <h4>SECTION 1: USING JWT FOR AUTHENTICATION</h4>
+
+            <ul>
+                <li><b>step 1: Navigate into the server folder and install JWT</b>
+                    <p>npm install jsonwebtoken --save</p>
+                </li>
+                <li><b>step 2: after installation is complete, open the api.js file and import(require) JWT</b>
+                    <p>const jwt = require('jsonwebtoken')</p>
+                </li>
+                    <li><b>step 3: generate the token in the 'register' api</b>
+                        <p>const jwt = require('jsonwebtoken')</p>
+                        <ul>
+                            <li>
+                                <p><u>a. create "payload" in the else-block like below</u><br />
+                                    router.post('/register', (req, res)=>{{'{'}}<br />
+                                    let userData = req.body<br />
+                                    let user = new User(userData)<br />
+                                    user.save((error, registeredUser) => {{'{'}}<br />
+                                        if(error){{'{'}}<br />
+                                            console.log(error)<br />
+                                        }else{{'{'}}<br />
+        ****                                    let payload = {{'{'}}<br />
+                                                subject: registeredUser._id<br />
+                                            }<br />
+                                            res.status(200).send(registeredUser)<br />
+                                            console.log(registeredUser)<br />
+                                        }<br />
+                                    })<br />
+                                })<br />
+                                </p>
+                            </li>
+                            <li>
+                                <u>b. sign a "token" and generate it like below</u><br />
+                                <figure class="image is-1027x576">
+                                    <img src="../../assets/server-image10.png">
+                                </figure>
+                                
+                                        router.post('/register', (req, res)=>{{'{'}}<br />
+                                            let userData = req.body<br />
+                                            let user = new User(userData)<br />
+                                            user.save((error, registeredUser) => {{'{'}}<br />
+                                                if(error){{'{'}}<br />
+                                                    console.log(error)<br />
+                                                }else{{'{'}}<br />
+                                                    let payload = {{'{'}}<br />
+                                                        subject: registeredUser._id<br />
+                                                    }<br />
+                ****                                    let token = jwt.sign(payload, 'mySecretKey')<br />
+                                                    res.status(200).send(registeredUser)<br />
+                                                    console.log(registeredUser)<br />
+                                                }<br />
+                                            })<br />
+                                        })
+                                
+                            </li>
+                            <li>
+                                                
+                                <u>c. send the token as an object, instead of the "registeredUser" that we've been sending before, like below</u><br />
+                                <figure class="image is-1027x576">
+                                    <img src="../../assets/server-image11.png">
+                                </figure>
+                                
+                                        router.post('/register', (req, res)=>{{'{'}}<br />
+                                            let userData = req.body<br />
+                                            let user = new User(userData)<br />
+                                            user.save((error, registeredUser) => {{'{'}}<br />
+                                                if(error){{'{'}}<br />
+                                                    console.log(error)<br />
+                                                }else{{'{'}}<br />
+                                                    let payload = {{'{'}}<br />
+                                                        subject: registeredUser._id<br />
+                                                    }<br />
+                                                    let token = jwt.sign(payload, 'mySecretKey')<br />
+****                                                res.status(200).send({{'{'}}token})<br />
+                                                    console.log(registeredUser)<br />
+                                                }<br />
+                                            })<br />
+                                        })
+                            </li>
+                        </ul>
+                    </li>
+                <li><b>step 4: replicate the token process in the 'login' api</b>
+                    <figure class="image is-1027x576">
+                        <img src="../../assets/server-image12.png">
+                    </figure>
+                    <ul>
+                        <li>
+
+                            <p><u>a. create "payload" in the else-block like below</u><br/>
+                            
+                                    router.post('/login', (req, res) => {{'{'}}<br/>
+                                        let userData = req.body<br/>
+        
+                                        User.findOne(<br/>
+                                            {{'{'}} email: userData.email }, (error, user) => {{'{'}}<br/>
+                                                if (error) {{'{'}}
+                                                    console.log(error)<br/>
+                                                } else {{'{'}}<br/>
+                                                    if (!user) {{'{'}}<br/>
+                                                        res.status(401).send('Invalid email!')<br/>
+                                                    } else if (user.password !== userData.password) {{'{'}}<br/>
+                                                        res.status(401).send('Invalid password!')<br/>
+                                                    } else {{'{'}}<br/>
+        ****                                    let payload = {{'{'}}<br/>
+                                                    subject: user._id<br/>
+                                                }<br/>
+                                                        res.status(200).send(user)<br/>
+                                                    }<br/>
+                                                }<br/>
+                                            }<br/>
+                                        )<br/>
+                                    })<br/>
+                                </p>
+                        </li>
+                        
+                        <li>
+
+                            <p><u>b. sign a "token" and generate it like below</u><br/>
+                                <figure class="image is-1027x576">
+                                    <img src="../../assets/server-image13.png">
+                                </figure>
+                            
+                                router.post('/login', (req, res) => {{'{'}}<br/>
+                                    let userData = req.body<br/>
+    
+                                    User.findOne(<br/>
+                                        {{'{'}} email: userData.email }, (error, user) => {{'{'}}<br/>
+                                            if (error) {{'{'}}<br/>
+                                                console.log(error)<br/>
+                                            } else {{'{'}}<br/>
+                                                if (!user) {{'{'}}<br/>
+                                                    res.status(401).send('Invalid email!')<br/>
+                                                } else if (user.password !== userData.password) {{'{'}}<br/>
+                                                    res.status(401).send('Invalid password!')<br/>
+                                                } else {{'{'}}<br/>
+                                            let payload = {{'{'}}<br/>
+                                                subject: user._id<br/>
+                                            }<br/>
+    ****                                    let token = jwt.sign(payload, 'mySecretKey')<br/>
+                                                    res.status(200).send(user)<br/>
+                                                }<br/>
+                                            }<br/>
+                                        }<br/>
+                                    )<br/>
+                                })
+                                </p>
+                        </li>
+
+                        
+                        
+                        <li>
+
+                            <p><u>c. send the token as an object, instead of the "user" that we've been sending before, like below</u><br/>
+                                <figure class="image is-1027x576">
+                                    <img src="../../assets/server-image14.png">
+                                </figure>
+                            
+                            
+                    
+                                router.post('/login', (req, res) => {{'{'}}<br/>
+                                    let userData = req.body<br/>
+    
+                                    User.findOne(<br/>
+                                    {{'{'}} email: userData.email }, (error, user) => {{'{'}}<br/>
+                                            if (error) {{'{'}}<br/>
+                                                console.log(error)<br/>
+                                            } else {{'{'}}<br/>
+                                                if (!user) {{'{'}}<br/>
+                                                    res.status(401).send('Invalid email!')<br/>
+                                                }   else if (user.password !== userData.password) {{'{'}}<br/>
+                                                        res.status(401).send('Invalid password!')<br/>
+                                                    }   else {{'{'}}<br/>
+                                                            let payload = {{'{'}}<br/>
+                                                                subject: user._id<br/>
+                                                            }<br/>
+                                                            let token = jwt.sign(payload, 'mySecretKey')<br/>
+    ****                                                    res.status(200).send({{'{'}}token})<br/>
+                                                        }<br/>
+                                            }<br/>
+                                        }<br/>
+                                    )<br/>
+                                })
+                                </p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+<div class="container content">
+    <div class="columns">
+        <div class="column is-8-desktop is-offset-2-desktop">
+            <h2>Part Four</h2>
+            <h3>TO VERIFY JSON WEBTOKEN USING MIDDLEWARE </h3>
+            <figure class="image is-1027x576">
+                <img src="../../assets/server-image15.png">
+            </figure>
+            <p>
+                What is a middleware?<br/>
+                This is nothing but a function that gets executed before the user defined handler is executed
+            </p>
+    
+            <ul>
+                <li>
+                    <b>step 1: navigate into api.js file and create verifyToken() function</b><br/>
+                    verifyToken(req, res, next){{'{'}} }
+                </li>
+                <li>
+                    <b>step 2: within the function, the first check we make is weither the authorization key is not present as part of the header</b><br/>
+                    
+                    function verifyToken(req, res, next){{'{'}}<br/>
+                        if(!req.headers.authorization){{'{'}}<br/>
+                            res.status(401).send('Unauthorized request')<br/>
+                        }<br/>
+                    }
+                </li>
+                <li>
+                    <b>step 3: then we check if the authorization key is present as part of the header</b><br/>
+                    
+                    function verifyToken(req, res, next){{'{'}}<br/>
+                        if(!req.headers.authorization){{'{'}}<br/>
+                            res.status(401).send('Unauthorized request')<br/>
+                        }<br/>
+                        let token = req.headers.authorization.split(' ')[1]<br/>
+                        if (token === 'null'){{'{'}}<br/>
+                            res.status(401).send('Unauthorized request')<br/>
+                        }<br/>
+                        let payload = jwt.verify(token, 'mySecretKey')<br/>
+                        if(!payload){{'{'}}<br/>
+                            res.status(401).send('Unauthorized request')<br/>
+                        }<br/>
+                        req.userId = payload.subject<br/>
+                        next()<br/>
+                    }
+                </li>
+            </ul>
+            
+    
+    
+            
+    
+    
+            
+    
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next page</a>
+        <ul class="pagination-list">
+          <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+          <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+          <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+        </ul>
+      </nav>
 </div>
