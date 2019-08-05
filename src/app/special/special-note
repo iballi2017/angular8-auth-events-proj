@@ -1,0 +1,71 @@
+TO HANDLE 401 STATUS CODE FROM THE BACKEND SERVER MIDDLEWARE
+
+                        import { Component, OnInit } from '@angular/core';
+                        import { EventService } from '../event.service';
+
+                        export class SpecialComponent implements OnInit {
+                            title: String = "Special Events"
+                            specialEvents = [];
+                            constructor(private _specialEventService: EventService) { }
+
+                            ngOnInit() {
+
+                                this._specialEventService.getspecialEvents()
+                                .subscribe(res => {
+                                                console.log(res), 
+                                                this.specialEvents = res
+                                            },
+                                    err => console.log(err)
+                                )
+                            }
+
+                        }
+
+        Instead of logging the error into the console, let's handle it better
+
+            step 1: import and inject angular "Router" for redirection if error occurs
+
+                        import { Component, OnInit } from '@angular/core';
+                        import { EventService } from '../event.service';
+****                    import { Router } from '@angular/router';
+
+                        export class SpecialComponent implements OnInit {
+                            title: String = "Special Events"
+                            specialEvents = [];
+****                        constructor(private _specialEventService: EventService, private _router: Router) { }
+
+                            ngOnInit() {
+
+                                this._specialEventService.getspecialEvents()
+                                .subscribe(res => {
+                                                console.log(res), 
+                                                this.specialEvents = res
+                                            },
+                                    err => console.log(err)
+                                )
+                            }
+
+                        }
+
+            step 2: configure the err block like below
+
+                            ngOnInit() {
+
+                                this._specialEventService.getspecialEvents()
+                                .subscribe(res => {
+                                                console.log(res), 
+                                                this.specialEvents = res
+                                            },
+                                     err => {
+                                        // console.log(err),
+                                        if(err instanceof HttpErrorResponse){
+                                            if(err.status  === 401){
+                                            this._router.navigate(['/login'])
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+
+                        note: if error occurs as you try to route to the special events from the backend, the router redirect you to the login page.
+                                this is so because the '/special' carries a security(authentication) middleware at the server level(backend)

@@ -1,0 +1,164 @@
+This is to document the process of sending a POST request to register a user to a backend api
+
+SECTION 1:  In app.module.ts
+        step 1: import "FormsModule" to allow you make use of all forms directives
+        step 2: import "HttpclientModule" to allow you make HTTP requests to the service or the backend api server
+
+SECTION 2: In register.component.html
+        step 1: Create the form html template
+
+            <form>
+                email:      <input type="text">
+                password:   <input type="password">
+                            <button>Sign up</button>
+            </form>
+        
+        step 2: Imagine the whole form to be an object, while the form-controls to be the properties
+                                    form{
+                                        "email": ""
+                                        "password": ""
+                                    }
+
+                Let's imagine the form is called "registerdUserData"; the email is called "email" and the password is called "password"
+                                    registerdUserData{
+                                        "email": ""
+                                        "password": ""
+                                    }
+        
+        step 3: give the form-controls thier names like below
+                                    <form>
+                                        email:      <input type="text" name="email">
+                                        password:   <input type="password" name="password">
+                                                    <button>Sign up</button>
+                                    </form>
+                    note: form-controls are the fields that can carry values, e.g check-box, radio-button, input e.t.c
+                    
+        step 4: add [(ngModel)] to the form controls and place the data-object values to it like below
+                                    <form>
+                                        email:      <input type="text" name="email" [(ngModel)]="registerdUserData.email">
+                                        password:   <input type="password" name="password" [(ngModel)]="registerdUserData.password">
+                                                    <button>Sign up</button>
+                                    </form>
+
+
+SECTION 3: In register.component.ts
+        step 1: create an instance of the registration object like below
+
+                export class RegisterComponent implements OnInit {
+                    registerdUserData = {};
+
+                }
+
+        step 1b: create an instance of the registration api "_url" like below
+
+                export class RegisterComponent implements OnInit {
+                    private registerdUserData = {};
+                    private _registrationUrl = "http://localhost:3000/api/register"
+
+                }
+
+        step 2: import HTTP to make an api call like below
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class RegisterComponent implements OnInit {
+                    registerdUserData = {};
+                    constructor(private http: HttpClient){}
+                }
+        
+        step 3: make a POST request to register user into the api with the funtion name "registerUser()"
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class RegisterComponent implements OnInit {
+                    registerdUserData = {};
+                    constructor(private http: HttpClient){}
+
+                    registerUser(){
+                        this.http.post(this._registrationUrl, registerdUserData)
+                    }
+                }
+
+        step 4: subscribe to the returned observable and log response and errors (if errors occurs) to the console like below
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class RegisterComponent implements OnInit {
+                    registerdUserData = {};
+                    constructor(private http: HttpClient){}
+
+                    registerUser(){
+                        this.http.post<any>(this._registrationUrl, registerdUserData)
+                        .subscribe(data => console.log(data))
+                    }
+                }
+
+
+
+SECTION 4: Back to the register.component.html
+        add a click event to the submit button to bind to the registerUser() function like below
+        
+                <form>
+                    email:      <input type="text" name="email" [(ngModel)]="registerdUserData.email">
+                    password:   <input type="password" name="password" [(ngModel)]="registerdUserData.password">
+                                <button class="button is-link" (click)="registerUser()">Sign up</button>
+                </form>
+
+
+
+
+
+//////////////////////with the codes above, we should be able to post a registration to the database
+ and the response appear in the browser console//////////////////////////////
+
+
+
+TO STORE WEB TOKEN IN THE BROWSER LOCAL STORAGE
+        step 1: Navigate to "register.component.ts" and add codes to the api response in order to store token
+
+                registerUser() {
+                    this._auth.registerUser(this.registerdUserData)
+                    .subscribe(
+                        data => {
+                            console.log(data)
+                            localStorage.steItem('token', data.token)
+                        },
+                        err => console.log(err)
+                    )
+                }
+
+        step 2: Test the storage process by checking the "Application" area in the console for 
+                the generated token when you try to register
+            
+TO ROUTE TO A PARTICUALR LOGIN PAGE AFTER REGISTRATION
+
+        step 1: import angular "Router" and inject it in the construter() like below
+                                        
+                                import { Router } from '@angular/router';
+
+                                export class RegisterComponent implements OnInit {
+                                    constructor(private _auth: AuthService, router: Router) { }
+                                }
+
+        step 2: use the Navigate() method in the response block like below
+                                        
+                                import { Router } from '@angular/router';
+
+                                export class RegisterComponent implements OnInit {
+                                    constructor(private _auth: AuthService, _router: Router) { }
+
+                                    registerUser() {
+                                        this._auth.registerUser(this.registerdUserData)
+                                        .subscribe(
+                                            data =>  {
+                                            console.log(data)
+                                            localStorage.setItem('token', data.token)
+                                            this._router.navigate(['/login'])
+                                        },
+                                            err => console.log(err)
+                                        )
+                                    }
+                                }
+
+        step 3: test the process by registering a user. You will realise the system will 
+                direct you to the login page after a successful registration

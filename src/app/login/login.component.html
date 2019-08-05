@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="columns is-12">
+        <div class="column is-4-desktop is-offset-4-desktop is-10-mobile is-offset-1-mobile">
+            <div class="card login">
+                <header class="card-header content">
+                    <h1 class="card-header-title">
+                        Login
+                    </h1>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <form action="">
+
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input class="input" type="email" placeholder="Email input" value="hello@" [(ngModel)]="loginUserData.email" name="email">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <span class="icon is-small is-right">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </span>
+                                </div>
+                            </div>
+ 
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Text input" [(ngModel)]="loginUserData.pwd" name="pwd" [ngClass]="{'is-danger': putClass}">
+                                </div>
+                            </div>
+
+                            <div class=" field is-grouped">
+                                    <div class="control">
+                                        <button class="button is-success is-link" (click)="loginUser()">Login</button>
+                                    </div>
+                                    <div class="control">
+                                        <span><b>You don't have an account?</b></span><span class="reg-link"><a routerLink="../register" class="is-text">Register</a></span>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

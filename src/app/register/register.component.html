@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="columns is-12">
+        <div class="column is-4-desktop is-offset-4-desktop is-10-mobile is-offset-1-mobile">
+            <div class="card logout">
+                <header class="card-header content">
+                    <h1 class="card-header-title">
+                        Register
+                    </h1>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <form action="">
+                            <!-- <div class="field">
+                                <label class="label">Name</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Text input" [(ngModel)]="registerdUserData.name" name="name">
+                                </div>
+                            </div> -->
+
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input class="input" type="email" placeholder="Email input"
+                                        value="hello@" [(ngModel)]="registerdUserData.email" name="email">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <span class="icon is-small is-right">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label class="label">Password</label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Text input" [(ngModel)]="registerdUserData.pwd" name="pwd">
+                                </div>
+                            </div>
+<!-- 
+                            <div class="field">
+                                <label class="label">Confirm Password</label>
+                                <div class="control">
+                                    <input class="input" type="password" placeholder="Text input" [disabled]="!enabled" [(ngModel)]="registerdUserData.pwd2" name="pwd2">
+                                </div>
+                            </div> -->
+
+                            <div class=" field is-grouped">
+                                    <div class="control">
+                                        <button class="button is-link" (click)="registerUser()">Sign up</button>
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-text">Cancel</button>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

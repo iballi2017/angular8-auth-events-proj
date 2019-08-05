@@ -1,0 +1,26 @@
+<div class="container content">
+    <h1>{{title}}</h1>
+    <div class="columns is-multiline">
+        <div class="column is-one-quarter-desktop" *ngFor="let event of specialEvents">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        {{event.name}}
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <p>{{event.description}}</p>
+                        <a href="#" class="card-footer-item button is-success">Buy Tickets</a>
+                        <br>
+                        <time datetime="2016-1-1">{{event.id}}</time>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <!-- <a href="#" class="card-footer-item">{{event.date | date: 'shortDate'}}</a> -->
+                    <a href="#" class="card-footer-item">{{event.date}}</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

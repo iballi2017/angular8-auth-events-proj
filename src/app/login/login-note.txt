@@ -1,0 +1,555 @@
+This is to document the process of sending a POST request to login a user to a backend api
+
+SECTION 1:  In app.module.ts
+        step 1: import "FormsModule" to allow you make use of all forms directives (already done before)
+        step 2: import "HttpclientModule" to allow you make HTTP requests to the service or the backend api server (already done before)
+
+SECTION 2: In login.component.html
+        step 1: Create the form html template
+
+            <form>
+                email:      <input type="text">
+                password:   <input type="password">
+                            <button>Sign up</button>
+            </form>
+        
+        step 2: Imagine the whole form to be an object, while the form-controls to be the properties
+                                    form{
+                                        "email": ""
+                                        "password": ""
+                                    }
+
+                Let's imagine the form is called "loginUserData"; the email is called "email" and the password is called "password"
+                                    loginUserData{
+                                        "email": ""
+                                        "password": ""
+                                    }
+        
+        step 3: give the form-controls thier names like below
+                                    <form>
+                                        email:      <input type="text" name="email">
+                                        password:   <input type="password" name="password">
+                                                    <button>Sign up</button>
+                                    </form>
+                    note: form-controls are the fields that can carry values, e.g check-box, radio-button, input e.t.c
+                    
+        step 4: add [(ngModel)] to the form controls and place the data-object values to it like below
+                                    <form>
+                                        email:      <input type="text" name="email" [(ngModel)]="loginUserData.email">
+                                        password:   <input type="password" name="password" [(ngModel)]="loginUserData.password">
+                                                    <button>Sign up</button>
+                                    </form>
+
+
+SECTION 3: In register.component.ts
+        step 1: create an instance of the registration object like below
+
+                export class LoginComponent implements OnInit {
+                    loginUserData = {};
+
+                }
+
+        step 1b: create an instance of the login api "_url" like below
+
+                export class LoginComponent implements OnInit {
+                    private loginUserData = {};
+                    private _loginnUrl = "http://localhost:3000/api/login"
+
+                }
+
+        step 2: import HTTP to make an api call like below
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class LoginComponent implements OnInit {
+                    loginUserData = {};
+                    constructor(private http: HttpClient){}
+                }
+        
+        step 3: make a POST request to login user into the api with the funtion name "loginUser()"
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class LoginComponent implements OnInit {
+                    loginUserData = {};
+                    constructor(private http: HttpClient){}
+
+                    loginUser(){
+                        this.http.post<any>(this._loginUrl, loginUserData)
+                    }
+                }
+
+        step 4: subscribe to the returned observable and log response and errors (if errors occurs) to the console like below
+
+                import { HttpclientModule } from '@angular/common/http
+
+                export class LoginComponent implements OnInit {
+                    loginUserData = {};
+                    constructor(private http: HttpClient){}
+
+                    loginUser(){
+                        this.http.post<any>(this._loginUrl, loginUserData)
+                        .subscribe(data => console.log(data))
+                    }
+                }
+
+
+
+SECTION 4: Back to the register.component.html
+        add a click event to the submit button to bind to the loginUser() function like below
+        
+                <form>
+                    email:      <input type="text" name="email" [(ngModel)]="loginUserData.email">
+                    password:   <input type="password" name="password" [(ngModel)]="loginUserData.password">
+                                <button class="button is-link" (click)="loginUser()">Sign up</button>
+                </form>
+
+
+
+
+
+//////////////////////with the codes above, we should be able to post a login to the database
+ and the response appear in the browser console//////////////////////////////
+
+
+ NOTE: We did not implement "Service" in this project documentation
+
+
+ SECTION 5: Service
+    Service can be described as the moderator between the component and the api.
+    The service will make all the api requests, while the component will only subscribe.
+
+    Now lets implement the service
+
+            step 1: generate a service called "AuthService"
+                        ng generate service auth
+            step 2: open "app.module.ts" add AuthService to  the 'providers' array i.e providers[], like below
+                                    
+                        import { AuthService } from './auth.service';
+                        
+                        providers: [
+                            AuthService
+                        ]
+
+            step 3: open "auth.service.ts", import "HttpclientModule" and inject "HttpClient" in the constructor like below
+                        
+                        import { HttpClient } from '@angular/common/http';
+                        
+                        @Injectable({
+                        providedIn: 'root'
+                        })
+                        export class AuthService {
+                            constructor(private http: HttpClient) { }
+
+                        }
+
+            step 4: create variables for both register and login URLs
+                        
+                        import { HttpClient } from '@angular/common/http';
+
+****                    private _registerUrl = "http://localhost:3000/api/register"
+****                    private _loginUrl = "http://localhost:3000/api/login"
+                        
+                        @Injectable({
+                        providedIn: 'root'
+                        })
+                        export class AuthService {
+                            constructor(private http: HttpClient) { }
+
+                        }
+                        
+            step 5: create functions to call both login and register api
+                        
+                        import { HttpClient } from '@angular/common/http';
+
+                        private _registerUrl = "http://localhost:3000/api/register"
+                        private _loginUrl = "http://localhost:3000/api/login"
+                        
+                        @Injectable({
+                        providedIn: 'root'
+                        })
+                        export class AuthService {
+                            constructor(private http: HttpClient) { }
+
+                                                        
+                            registerUser(user){
+                                return this.http.post<any>(this._registerUrl, user)
+                            }
+
+                            loginUser(user){
+                                return this.http.post<any>(this._loginUrl, user)
+                            }
+
+                        }
+
+            step 6: In the login.component.ts
+
+                a. import the AuthService and inject it in the constructor like below
+                                
+****                            import { AuthService } from '../auth.service';
+
+****                            export class RegisterComponent implements OnInit {
+                                        
+                                    loginUserData = {};
+                                    
+                                    constructor(private _auth: AuthService) { }
+
+                                }
+
+
+
+
+                b. create the form object variable
+                                
+                                import { AuthService } from '../auth.service';
+
+
+                                export class RegisterComponent implements OnInit {
+                                        
+****                                loginUserData = {};
+                                    
+                                    constructor(private _auth: AuthService) { }
+
+
+                                    loginUser() {
+                                        this._auth.loginUser(this.registerdUserData)
+                                        .subscribe(
+                                            data => console.log(data)
+                                            err => console.log(err)
+                                        )
+                                    }
+
+                                }                
+
+                c. create the login function and consume the AuthService
+                                
+                                import { AuthService } from '../auth.service';
+
+
+                                export class RegisterComponent implements OnInit {
+                                        
+                                    loginUserData = {};
+                                    
+                                    constructor(private _auth: AuthService) { }
+
+
+                                    loginUser() {
+                                        this._auth.loginUser(this.registerdUserData)
+                                        .subscribe(
+                                            data => console.log(data)
+                                            err => console.log(err)
+                                        )
+                                    }
+
+                                }
+
+
+        NOTE: Follow the same process in the Register component
+
+
+//////////////////////with the codes above, we should be able to post a login to the database
+ and the response appear in the browser console//////////////////////////////
+
+
+
+TO STORE WEB TOKEN IN THE BROWSER LOCAL STORAGE
+        step 1: Navigate to "login.component.ts" and add codes to the api response in order to store token
+                                    
+                    loginUser() {
+                        this.http.post<any>(this._loginUrl, this.loginUserData)
+                        .subscribe(
+                            res => {
+                            console.log(res),
+                                localStorage.steItem('token', res.token)
+                            },
+                            err => console.log(err))
+                        // console.log(this.loginUserData);
+                    }
+
+        step 2: Test the storage process by checking the "Application" area in the console for 
+                the generated token when you try to login
+
+        step 3: test the process by login a user. You will realise the system will 
+                direct you to the "special events" page after a successful registration
+
+
+
+
+TO IMPLEMENT "ROUTE GUARD" FUNCTIONALITY
+        step 1: install guard service
+                    ng g guard auth
+                note: "auth" can be any name of your choice
+
+        step 2: open "auth.service.ts" file and define the method
+                    loggedIn(){
+                        return !!localStorage.getItem('token')
+                    }
+                note: "!!" will make it return a true-false boolean value and not the token itself
+                        If the token exist in the browser, its going to return "true", if not, its
+                        going to return "false"
+
+        step 3: open "auth.guard.ts" 
+                remove "ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree" and "Observable" from the import at the top, cos we don't need it for Now
+                    a. import "Router"
+                            import { CanActivate, Router } from '@angular/router';
+                    b. import "AuthService"
+
+        step 4: write the canActivate code like below;
+                    
+                        export class AuthGuard implements CanActivate {
+                            constructor(){ }
+
+                        }
+        step 5: inject the AuthService and Router
+
+                        import { CanActivate, Router } from '@angular/router';
+                        import { AuthService } from './auth.service';
+                    
+                        export class AuthGuard implements CanActivate {
+                            constructor(private _authService: AuthService, private _router: Router){ }
+
+                        }
+        step 6: now define the "canActivate()" method
+
+                        import { CanActivate, Router } from '@angular/router';
+                        import { AuthService } from './auth.service';
+                    
+                        export class AuthGuard implements CanActivate {
+                            constructor(private _authService: AuthService, private _router: Router){ }
+
+                            canActivate(): boolean{
+                                if(this._authService.loggedIn()){
+                                    return true
+                                }   else{
+                                        this._router.navigate(['/login'])
+                                        return false
+                                    }
+                            }
+                        }
+
+                note: the canActivate() means; if the user is loggedIn(if the token is present), return true
+                                                if there is no token, return false(go to the login page)
+
+        step 7: add AuthGuard to the app.module.ts (in the providers array)
+
+        step 8: in the app-routing.module.ts file, add "canActivate" to the "/special" route
+                        const routes: Routes = [
+                            { path: "", redirectTo: "/events", pathMatch: "full"},
+                            {path: "register", component: RegisterComponent},
+                            {path: "login", component: LoginComponent},
+                            {path: "events", component: EventsComponent},
+****                        {path: "special", component: SpecialComponent, canActivate: [AuthGuard]},
+                            {path: "**", component: PageNotFoundComponent}
+                        ];
+
+                NOTE: The codes above should disallowed user to view the special-Events page unless they have a token(loggedIn)
+
+
+TOKEN VERIFICATION FROM THE server
+    This can be achieved by using "angular HTTP interceptor"
+
+        step 1: generate the service using angular CLI, so do that in the terminal
+                    ng g s token-interceptor
+                note: "token-interceptor" can be any name
+
+        step 2: after the service had been generated, import "HttpInterceptor"
+
+****                        import { HttpInterceptor } from '@angular/common/http';
+
+                                export class TokenInterceptorService {
+
+                                constructor() { }
+                            }
+
+
+        step 3: make the class implements HttpInterceptor interface
+
+                            import { HttpInterceptor } from '@angular/common/http';
+
+****                            export class TokenInterceptorService implements HttpInterceptor {
+
+                                constructor() { }
+                            }
+
+        step 4: define an intercept() method
+
+                            import { HttpInterceptor } from '@angular/common/http';
+
+                                export class TokenInterceptorService implements HttpInterceptor {
+
+                                constructor() { }
+                                
+                                    intercept(req, next){ }
+                            }
+
+        step 5: within the intercept(), make a clone of the request
+
+                            import { HttpInterceptor } from '@angular/common/http';
+
+                                export class TokenInterceptorService implements HttpInterceptor {
+
+                                constructor() { }
+                                
+                                    intercept(req, next){
+                                        let tokenizedReq = req.clone()
+                                    }
+                            }
+
+        step 6: add the authorization information to the header of the cloned request
+
+                            import { HttpInterceptor } from '@angular/common/http';
+
+                                export class TokenInterceptorService implements HttpInterceptor {
+
+                                constructor() { }
+                                
+                                    intercept(req, next){
+                                        let tokenizedReq = req.clone({
+                                            setHeaders: {
+                                                Authorization: 'Bearer xx.yy.zz'
+                                            }
+                                        })
+                                    }
+                            }
+
+        step 7: pass on the execution by adding "return next.handle(tokenizedReq)"
+
+                            import { HttpInterceptor } from '@angular/common/http';
+
+                                export class TokenInterceptorService implements HttpInterceptor {
+
+                                constructor() { }
+                                
+                                    intercept(req, next){
+                                        let tokenizedReq = req.clone({
+                                            setHeaders: {
+                                                Authorization: 'Bearer xx.yy.zz'
+                                            }
+                                        })
+                                        return next.handle(tokenizedReq)
+                                    }
+                            }
+
+        step 8: register the TokenInterceptorService in the app.module.ts
+
+        step 9: also in app.module.ts add "HTTP_INTERCEPTORS" to the imports from '@angular/common/http, like below;
+
+                    import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+
+        step 10: add "HTTP_INTERCEPTORS" in the providers array as an object like below;
+
+                                providers: [
+                                    AuthService,
+                                    EventService,
+                                    DatePipe,
+                                    AuthGuard,
+                                    TokenInterceptorService,
+****                                {
+                                    provide: HTTP_INTERCEPTORS,
+                                    useClass: TokenInterceptorService,
+                                    multi: true
+                                    }
+                                ],
+                            note: "multi: true", so that we can use multiple interceptors if required
+
+
+                    NOTE: To test the codes above;
+                    a. go to the browser console
+                    b. click on "Network"
+                    c. clear the network face
+                    d. on your page navigation bar, click "event" menu and watch the browser console reveals information about the "Headers" Authorization
+
+
+                    ALSO NOTE: that the xx.yy.zz is a hardcoded token
+
+
+
+TO WORK WITH DYNAMIC TOKEN AUTHENTICATION
+
+                step 1: navigate to the auth.service.ts file and create a getToken() method               
+                                                                
+                                export class AuthService {
+
+                                    private _privateUrl = "http://localhost:3000/api/register"
+                                    constructor(private http: HttpClient) { }
+
+                                    registerUser(user) {
+                                        return this.http.post<any>(this._privateUrl, user)
+                                    }
+
+                                    loggedIn() {
+                                        return !!localStorage.getItem('token')
+                                    }
+
+****                                getToken(){
+                                        return localStorage.getItem('token')
+                                    }
+                                }
+
+                step 2: now we'll use the getToken() in TokenInterceptorService
+
+                        a. import AuthService
+
+                        b. inject the AuthService; this is done in a different manner, unlike using the constructor directly to inject
+                                i. import injector from '@angular/core';
+****                                    import { Injectable, Injector } from '@angular/core';
+
+                                ii. inject the injector; in the the constructor like below;
+                                        import { Injectable, Injector } from '@angular/core';
+
+                                        export class TokenInterceptorService implements HttpInterceptor {
+
+****                                    constructor( private injector: Injector) { }
+                                                                        
+                                            intercept(req, next){
+                                                let tokenizedReq = req.clone({
+                                                    setHeaders: {
+                                                        Authorization: 'Bearer xx.yy.zz'
+                                                    }
+                                                })
+                                                return next.handle(tokenizedReq)
+                                            }
+                                        }
+
+
+                        c. now we'll use the injector to get the AuthService
+                                        import { Injectable, Injector } from '@angular/core';
+
+                                        export class TokenInterceptorService implements HttpInterceptor {
+
+                                        constructor( private injector: Injector) { }
+                                                                        
+                                            intercept(req, next){
+****                                            let authService = this.injector.get(AuthService)
+                                                let tokenizedReq = req.clone({
+                                                    setHeaders: {
+                                                        Authorization: 'Bearer xx.yy.zz'
+                                                    }
+                                                })
+                                                return next.handle(tokenizedReq)
+                                            }
+                                        }
+
+
+                        d. replace the hardcoded token with the getToken() from AuthService
+                                        import { Injectable, Injector } from '@angular/core';
+
+                                        export class TokenInterceptorService implements HttpInterceptor {
+
+                                        constructor( private injector: Injector) { }
+                                                                        
+                                            intercept(req, next){
+                                                let authService = this.injector.get(AuthService)
+                                                let tokenizedReq = req.clone({
+                                                    setHeaders: {
+                                                        Authorization: `Bearer ${authService.getToken()}`
+                                                    }
+                                                })
+                                                return next.handle(tokenizedReq)
+                                            }
+                                        }
+
+
+                    NOTE: That is that about TOKEN AUTHENTICATION.
+                            Test our work progress on the browser console with "Application" and "Network" panel
+

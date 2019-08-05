@@ -1,0 +1,54 @@
+TO IMPLEMENT LOGOUT FUNCTIONALITY
+        We are using the app.component.ts because the AppComponent carries the navigation bar
+    
+    step 1: import and inject the "AuthService"
+
+    step 2: navigate to the app.component.html
+            a. add " *ngIf = '!authService.loggedIn()' " to the login and register links
+                this states that both links should be visible only when the user hasn't logged in
+
+            b. add " *ngIf = '_authService.loggedIn()' " to the logout link
+                this states that the logout link should be visible only when the user is logged in
+
+            c. also add " (click) = '_authService.logoutUser()' " to the logout link
+
+            d. define " logoutUser() " in the AuthService
+                        
+                            logoutUser(){
+                                localStorage.removeItem('token')
+                            }
+            
+            e. define the route of navigation after the logoutUser() has removed the token
+
+                        i. import and inject angular "Router"
+
+                                import { Router } from '@angular/router'
+
+                                export class AuthService {
+                                    constructor(private http: HttpClient, private _router: Router) { }
+                                    
+                                }
+                        
+                        ii. define the route direction
+
+                                import { Router } from '@angular/router'
+                                
+                                export class AuthService {
+                                    constructor(private http: HttpClient, private _router: Router) { }
+                                        logoutUser(){
+                                            localStorage.removeItem('token')
+                                            this._router.navigate(['/events'])
+                                        }
+                                }
+            
+    step 3: navigate to the app.component.ts
+            a. import "AuthService"
+                        import { AuthService } from './auth.service';
+
+            b. inject AuthService
+                        export class AppComponent {
+                            title = 'Angular8-Auth-proj';
+
+****                        constructor(private _authService: AuthService){}
+                        
+                        }
